@@ -19,7 +19,6 @@ GRAY = "#999999"
 LIGHTGRAY = "#CCCCCC"
 
 
-
 def getFontQss(fontname, fontcolor):
     return "QObject{font-family:%s;color:%s}" % (fontname, fontcolor)
 
@@ -57,7 +56,7 @@ def getComboxQss(backgroundColor, normalColor, focusColor, arrowimageurl):
     str4 = "QComboBox:disabled{color:%s;}" % (LIGHTGRAY)
     str5 = "QComboBox::drop-down{border-style:solid;}"
     str6 = "QComboBox QAbstractItemView{border:2px solid %s;border-radius:5px;background:transparent;selection-background-color:%s;}" % (
-    focusColor, focusColor)
+        focusColor, focusColor)
     str7 = "QComboBox::down-arrow{image:url(%s)}" % (arrowimageurl)
     return str1 + str2 + str3 + str4 + str5 + str6 + str7
 
@@ -65,8 +64,8 @@ def getComboxQss(backgroundColor, normalColor, focusColor, arrowimageurl):
 def getProgressBarQss(normalColor, chunkColor):
     barHeight = str(8)
     barRadius = str(8)
-    str1 = "QProgressBar{font:9pt;height:%2px;background:%1;border-radius:%3px;text-align:center;border:1px solid %1;}" % (
-        normalColor, barHeight, barRadius)
+    str1 = "QProgressBar{font:9pt;height:%spx;background:%s;border-radius:%spx;text-align:center;border:1px solid %s;}" % (
+        barHeight, normalColor, barRadius, normalColor)
     str2 = "QProgressBar:chunk{border-radius:%spx;background-color:%s;}" % (barRadius, chunkColor)
     return str1 + str2
 
@@ -80,9 +79,9 @@ def getSliderQss(normalColor, grooveColor, handleColor):
     str1 = "QSlider::groove:horizontal,QSlider::add-page:horizontal{height:%spx;border-radius:%spx;background:%s;}" % (
         normalColor, sliderHeight, sliderRadius)
     str2 = "QSlider::sub-page:horizontal{height:%spx;border-radius:%spx;background:%s;}" % (
-    sliderHeight, sliderRadius, grooveColor)
+        sliderHeight, sliderRadius, grooveColor)
     str3 = "QSlider::handle:horizontal{width:%spx;margin-top:-%spx;margin-bottom:-%spx;border-radius:%spx;background:qradialgradient(spread:pad,cx:0.5,cy:0.5,radius:0.5,fx:0.5,fy:0.5,stop:0.6 #FFFFFF,stop:0.8 %s);}" % (
-    handleWidth, handleOffset, handleOffset, handleRadius, handleColor)
+        handleWidth, handleOffset, handleOffset, handleRadius, handleColor)
     return str1 + str2 + str3
 
 
@@ -104,10 +103,11 @@ def getCheckBoxQss(normimageurl, checkimageurl, normimageurlhover, checkimageurl
 
 
 def getTabWidgetQss(normalTabColor, normalTabTextColor):
-    str1 = "QTabWidget{color:%s; background:%s;}" % (normalTabTextColor,normalTabColor)
+    str1 = "QTabWidget{color:%s; background:%s;}" % (normalTabTextColor, normalTabColor)
     str2 = "QTabWidget::tab-bar{left:5px}"
-    str3 = "QTabBar::tab{color:%s; background:%s;width:100px;height:25px;border:2px solid #33CCCC;border-radius:2px}" % (normalTabTextColor,normalTabColor)
-    str4 = "QTabBar::tab:hover{color:%s; background:%s;}" % (normalTabColor,normalTabTextColor)
+    str3 = "QTabBar::tab{color:%s; background:%s;width:100px;height:25px;border:2px solid #33CCCC;border-radius:2px}" % (
+    normalTabTextColor, normalTabColor)
+    str4 = "QTabBar::tab:hover{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     str5 = "QTabBar::tab:selected{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     return str1 + str3 + str4 + str5
 
@@ -117,5 +117,3 @@ def getScrollbarQss(handlebarcolor):
     str2 = "QScrollBar::handle{background:%s;border-radius:5px;min-height:10px}" % (handlebarcolor)
     str3 = "QScrollBar::handle:pressed{background:%s}" % (GRAY)
     return str1 + str2 + str3
-
-

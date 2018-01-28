@@ -76,14 +76,17 @@ class TitleBar(QWidget):
         # 标题栏背景颜色
         self.m_pBackgroundLabel.setStyleSheet("background:%s" % (colorid));
         # 三大金刚按钮Ui设置
-        self.m_pCloseButton.setStyleSheet(self.__get_button_imgqss(imageroot,imageclosenorm,imageclosehover,imageclosepress,imageclosepress))
-        self.m_pMinimizeButton.setStyleSheet(self.__get_button_imgqss(imageroot,imageminnorm,imageminhover,imageminpress,imageminpress))
-        self.m_pMaximizeButton.setStyleSheet(self.__get_button_imgqss(imageroot,imagemaxnorm,imagemaxhover,imagemaxpress,imagemaxpress))
+        self.m_pCloseButton.setStyleSheet(
+            self.__get_button_imgqss(imageroot, imageclosenorm, imageclosehover, imageclosepress, imageclosepress))
+        self.m_pMinimizeButton.setStyleSheet(
+            self.__get_button_imgqss(imageroot, imageminnorm, imageminhover, imageminpress, imageminpress))
+        self.m_pMaximizeButton.setStyleSheet(
+            self.__get_button_imgqss(imageroot, imagemaxnorm, imagemaxhover, imagemaxpress, imagemaxpress))
 
     def __get_button_imgqss(self, root, norm, hover, press, disable):
         qss = ''
         qss += "QPushButton{background:transparent; background-image:url(%s); border:none}" % (
-            root+norm)
+            root + norm)
         qss += "QPushButton:hover{background:transparent; background-image:url(%s)}" % (
             root + hover)
         qss += "QPushButton:pressed{background:transparent; background-image:url(%s)}" % (
@@ -91,7 +94,6 @@ class TitleBar(QWidget):
         qss += "QPushButton:disabled{background:transparent; background-image:url(%s)}" % (
             root + disable)
         return qss
-
 
     def mouseDoubleClickEvent(self, e):
         # self.m_pMaximizeButton.clicked.emit()     # 双击全屏
@@ -106,7 +108,7 @@ class TitleBar(QWidget):
         win32gui.ReleaseCapture()
         pWindow = self.window()
         if pWindow.isWindow():
-            win32gui.SendMessage(pWindow.winId(),win32con.WM_SYSCOMMAND,win32con.SC_MOVE+win32con.HTCAPTION,0)
+            win32gui.SendMessage(pWindow.winId(), win32con.WM_SYSCOMMAND, win32con.SC_MOVE + win32con.HTCAPTION, 0)
         e.ignore()
 
     def eventFilter(self, object, e):
@@ -126,7 +128,6 @@ class TitleBar(QWidget):
         # 注意!这里self要加上!!!!!!!!!
         return QWidget.eventFilter(self, object, e)
 
-
     @pyqtSlot()
     def __slot_onclicked(self):
         pButton = self.sender()
@@ -143,8 +144,7 @@ class TitleBar(QWidget):
                     # self.setStyleSheet(...)   # cpp有这段代码,虽然暂时未察觉有什么影响
             elif pButton.objectName() == 'closeButton':
                 pWindow.close()
-                # os._exit(0)                   # 这句不注释的话自窗体的__del__将不执行
-
+                os._exit(0)
 
     def __updateMaxmize(self):
         pWindow = self.window()
@@ -163,7 +163,6 @@ class TitleBar(QWidget):
         self.m_pMaximizeButton.setEnabled(isenable)
 
 
-
 """
 使用示例:
     app = QApplication(sys.argv)
@@ -175,11 +174,14 @@ class TitleBar(QWidget):
     mainWindow.show()
     sys.exit(app.exec_())
 """
+
+
 class WindowWithTitleBar(QFrame):
     titlebar = None
 
     def __init__(self, mainwidget, colorstr, parent):
         super(WindowWithTitleBar, self).__init__()
+        self.mainwidget = mainwidget;
         self.resize(mainwidget.width(), mainwidget.height() + TitleBar.titlebarHeight)
         self.titlebar = TitleBar(self, colorstr)
         self.setWindowFlags(Qt.FramelessWindowHint | self.windowFlags())
@@ -206,3 +208,6 @@ class WindowWithTitleBar(QFrame):
 
     def setBackgroundBorderColor(self, bgdcolor, bordercolor):
         self.setStyleSheet("WindowWithTitleBar{background:%s;border:3px solid %s}" % (bgdcolor, bordercolor))
+
+    def closeEvent(self, *args, **kwargs):
+        self.mainwidget.close()

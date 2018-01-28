@@ -35,6 +35,7 @@ def getGreenStyleQss():
     qss_str += Qss.getPlaineditQss(Qss.LIGHTGRAY,Qss.BLUEGREEN)
     qss_str += Qss.getLineeditQss(Qss.LIGHTGRAY,Qss.BLUEGREEN)
     qss_str += Qss.getComboxQss(Qss.WHITE,Qss.LIGHTGRAY,Qss.BLUEGREEN,window_titlebar.imageroot+"bluearrow.png")
+    qss_str += Qss.getProgressBarQss(Qss.LIGHTGRAY,Qss.BLUEGREEN)
     img_norm = window_titlebar.imageroot + "radio_normal.png"
     img_down = window_titlebar.imageroot + "radio_down.png"
     img_hover = window_titlebar.imageroot + "radio_hoverUncheck.png"
