@@ -66,7 +66,7 @@ def getProgressBarQss(normalColor, chunkColor):
     barRadius = str(8)
     str1 = "QProgressBar{font:9pt;height:%spx;background:%s;border-radius:%spx;text-align:center;border:1px solid %s;}" % (
         barHeight, normalColor, barRadius, normalColor)
-    str2 = "QProgressBar:chunk{border-radius:%spx;background-color:%s;}" % (barRadius, chunkColor)
+    str2 = "QProgressBar:chunk{border-radius:%spx;background-color:%s;margin:2px}" % (barRadius, chunkColor)
     return str1 + str2
 
 
