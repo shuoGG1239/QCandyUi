@@ -13,7 +13,7 @@ import win32gui, win32con
 
 # 这些路径是相对main.py的, 而不是相对本py文件的
 titletextcolor = "white"
-imageroot = "./qss_ui_theme/FlatUiSrcImage/"
+imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
 imageclosenorm = "close.png"
 imageclosehover = "closehover.png"
 imageclosepress = "closepress.png"
@@ -72,9 +72,9 @@ class TitleBar(QWidget):
         self.m_pMaximizeButton.clicked.connect(self.__slot_onclicked)
         self.m_pCloseButton.clicked.connect(self.__slot_onclicked)
         # 标题字体颜色
-        self.m_pTitleLabel.setStyleSheet("font-size:13px;margin-bottom:0px;color:%s" % (titletextcolor));
+        self.m_pTitleLabel.setStyleSheet("font-size:13px;margin-bottom:0px;color:%s" % (titletextcolor))
         # 标题栏背景颜色
-        self.m_pBackgroundLabel.setStyleSheet("background:%s" % (colorid));
+        self.m_pBackgroundLabel.setStyleSheet("background:%s" % (colorid))
         # 三大金刚按钮Ui设置
         self.m_pCloseButton.setStyleSheet(
             self.__get_button_imgqss(imageroot, imageclosenorm, imageclosehover, imageclosepress, imageclosepress))
@@ -181,7 +181,7 @@ class WindowWithTitleBar(QFrame):
 
     def __init__(self, mainwidget, colorstr, parent):
         super(WindowWithTitleBar, self).__init__()
-        self.mainwidget = mainwidget;
+        self.mainwidget = mainwidget
         self.resize(mainwidget.width(), mainwidget.height() + TitleBar.titlebarHeight)
         self.titlebar = TitleBar(self, colorstr)
         self.setWindowFlags(Qt.FramelessWindowHint | self.windowFlags())
