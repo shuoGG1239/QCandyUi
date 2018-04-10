@@ -13,7 +13,6 @@ import win32gui, win32con
 
 # 这些路径是相对main.py的, 而不是相对本py文件的
 titletextcolor = "white"
-imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
 imageclosenorm = "close.png"
 imageclosehover = "closehover.png"
 imageclosepress = "closepress.png"
@@ -26,6 +25,11 @@ imageminpress = "minsizepress.png"
 imageresizenorm = "resize.png"
 imageresizehover = "resizehover.png"
 imageresizepress = "resizepress.png"
+# 资源路径
+imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
+if not os.path.exists(imageroot+imageclosenorm):
+    imageroot = './qss_ui_theme/FlatUiSrcImage/'
+
 
 
 class TitleBar(QWidget):
