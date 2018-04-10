@@ -26,9 +26,9 @@ imageresizenorm = "resize.png"
 imageresizehover = "resizehover.png"
 imageresizepress = "resizepress.png"
 # 资源路径
-imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
+imageroot = './qss_ui_theme/FlatUiSrcImage/'
 if not os.path.exists(imageroot+imageclosenorm):
-    imageroot = './qss_ui_theme/FlatUiSrcImage/'
+    imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
 
 
 
