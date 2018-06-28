@@ -27,9 +27,8 @@ imageresizehover = "resizehover.png"
 imageresizepress = "resizepress.png"
 # 资源路径
 imageroot = './qss_ui_theme/FlatUiSrcImage/'
-if not os.path.exists(imageroot+imageclosenorm):
+if not os.path.exists(imageroot + imageclosenorm):
     imageroot = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
-
 
 
 class TitleBar(QWidget):
@@ -55,7 +54,6 @@ class TitleBar(QWidget):
         self.m_pMinimizeButton.setFixedSize(27, 22)
         self.m_pMaximizeButton.setFixedSize(27, 22)
         self.m_pCloseButton.setFixedSize(27, 22)
-        self.m_pMaximizeButton.setEnabled(False)
         self.m_pTitleLabel.setObjectName("whiteLabel")
         self.m_pMinimizeButton.setObjectName("minimizeButton")
         self.m_pMaximizeButton.setObjectName("maximizeButton")
@@ -100,8 +98,7 @@ class TitleBar(QWidget):
         return qss
 
     def mouseDoubleClickEvent(self, e):
-        # self.m_pMaximizeButton.clicked.emit()     # 双击全屏
-        pass
+        self.m_pMaximizeButton.clicked.emit()  # 双击全屏
 
     def mousePressEvent(self, e):
         """

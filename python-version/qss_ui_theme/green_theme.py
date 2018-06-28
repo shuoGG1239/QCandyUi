@@ -30,6 +30,7 @@ def green_decorator(aClass):
     :param aClass:
     :return:
     """
+
     def on_call(*args, **kargs):
         src_widget = aClass(*args, **kargs)
         dst_widget = window_titlebar.WindowWithTitleBar(src_widget, Qss.DARKBLUEGREEN, 0)
@@ -57,6 +58,7 @@ def getGreenStyleQss():
     qss_str += Qss.getPushButtonQss(Qss.BLUEGREEN, Qss.WHITE, Qss.LIGHTGREEN, Qss.BLUEGREEN, Qss.LIGHTGRAY, Qss.WHITE,
                                     Qss.GRAY, Qss.LIGHTGRAY)
     qss_str += Qss.getPlaineditQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
+    qss_str += Qss.getTextBrowerQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
     qss_str += Qss.getLineeditQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
     qss_str += Qss.getComboxQss(Qss.WHITE, Qss.LIGHTGRAY, Qss.BLUEGREEN, window_titlebar.imageroot + "bluearrow.png")
     img_norm = window_titlebar.imageroot + "radio_normal.png"

@@ -48,6 +48,13 @@ def getPlaineditQss(normalColor, focusColor):
     return str1 + str2
 
 
+def getTextBrowerQss(normalColor, focusColor):
+    str1 = "QTextBrowser{border-style:none;padding:2px;border-radius:5px;border:2px solid %s;font-family:宋体;selection-color:%s;selection-background-color:%s}" % (
+        normalColor, WHITE, focusColor)
+    str2 = "QTextBrowser:focus{border:2px solid %s;}" % (focusColor)
+    return str1 + str2
+
+
 def getComboxQss(backgroundColor, normalColor, focusColor, arrowimageurl):
     str1 = "QComboBox{background:%s;padding:2px;border-radius:5px;border:2px solid %s;}" % (
         backgroundColor, normalColor)
@@ -106,7 +113,7 @@ def getTabWidgetQss(normalTabColor, normalTabTextColor):
     str1 = "QTabWidget{color:%s; background:%s;}" % (normalTabTextColor, normalTabColor)
     str2 = "QTabWidget::tab-bar{left:5px}"
     str3 = "QTabBar::tab{color:%s; background:%s;width:100px;height:25px;border:2px solid #33CCCC;border-radius:2px}" % (
-    normalTabTextColor, normalTabColor)
+        normalTabTextColor, normalTabColor)
     str4 = "QTabBar::tab:hover{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     str5 = "QTabBar::tab:selected{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     return str1 + str3 + str4 + str5
