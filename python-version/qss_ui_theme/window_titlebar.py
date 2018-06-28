@@ -5,7 +5,7 @@
 """
 
 from PyQt5.QtWidgets import QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QWidget, QFrame
-from PyQt5.QtCore import QEvent, QSize, Qt, pyqtSlot
+from PyQt5.QtCore import QEvent, QSize, Qt, pyqtSlot, QRect, QPoint
 from PyQt5.QtGui import QPainter, QBitmap, QIcon, QColor
 from PyQt5.Qt import QMouseEvent, QSizePolicy
 import os
@@ -176,11 +176,24 @@ class TitleBar(QWidget):
     sys.exit(app.exec_())
 """
 
+NO_SELECT = 0,  # 鼠标未进入下方矩形区域
+LEFT_TOP_RECT = 1  # 鼠标在左上角区域
+TOP_BORDER = 2  # 鼠标在上边框区域
+RIGHT_TOP_RECT = 3  # 鼠标在右上角区域
+RIGHT_BORDER = 4  # 鼠标在右边框区域
+RIGHT_BOTTOM_RECT = 5  # 鼠标在右下角区域
+BOTTOM_BORDER = 6  # 鼠标在下边框区域
+LEFT_BOTTOM_RECT = 7  # 鼠标在左下角区域
+LEFT_BORDER = 8  # 鼠标在左边框区域
+STRETCH_RECT_WIDTH = 4
+STRETCH_RECT_HEIGHT = 4
+
 
 class WindowWithTitleBar(QFrame):
     titlebar = None
 
     def __init__(self, mainwidget, colorstr, parent):
+        global STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT
         super(WindowWithTitleBar, self).__init__()
         self.mainwidget = mainwidget
         self.resize(mainwidget.width(), mainwidget.height() + TitleBar.titlebarHeight)
@@ -194,6 +207,15 @@ class WindowWithTitleBar(QFrame):
         pLayout.setSpacing(0)  # 排列的几个widget为0间隔
         pLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(pLayout)
+        self.init_new_attr()
+
+    def init_new_attr(self):
+        self.setSupportStretch(True)
+        self.m_isWindowMax = False
+        self.m_stretchRectState = NO_SELECT
+        self.m_isMousePressed = False
+        self.m_windowMinWidth = 200
+        self.m_windowMinHeight = 100
 
     def setWindowRadius(self, n_px):
         """
@@ -212,3 +234,178 @@ class WindowWithTitleBar(QFrame):
 
     def closeEvent(self, *args, **kwargs):
         self.mainwidget.close()
+
+    def showEvent(self, event):
+        self.calculateCurrentStrechRect()
+        return super().showEvent(event);
+
+    def calculateCurrentStrechRect(self):
+        # 四个角Rect
+        self.m_leftTopRect = QRect(0, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
+        self.m_leftBottomRect = QRect(0, self.height() - STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, STRETCH_RECT_WIDTH)
+        self.m_rightTopRect = QRect(self.width() - STRETCH_RECT_WIDTH, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
+        self.m_rightBottomRect = QRect(self.width() - STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT,
+                                       STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
+        # 四条边Rect
+        self.m_topBorderRect = QRect(STRETCH_RECT_WIDTH, 0, self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
+        self.m_rightBorderRect = QRect(
+            self.width() - STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
+            self.height() - STRETCH_RECT_HEIGHT * 2)
+        self.m_bottomBorderRect = QRect(STRETCH_RECT_WIDTH,
+                                        self.height() - STRETCH_RECT_HEIGHT, self.width() - STRETCH_RECT_WIDTH * 2,
+                                        STRETCH_RECT_HEIGHT)
+        self.m_leftBorderRect = QRect(0, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
+                                      self.height() - STRETCH_RECT_HEIGHT * 2)
+
+    def getCurrentStretchState(self, cursorPos):
+        if self.m_leftTopRect.contains(cursorPos):
+            stretchState = LEFT_TOP_RECT
+        elif self.m_rightTopRect.contains(cursorPos):
+            stretchState = RIGHT_TOP_RECT
+        elif self.m_rightBottomRect.contains(cursorPos):
+            stretchState = RIGHT_BOTTOM_RECT
+        elif self.m_leftBottomRect.contains(cursorPos):
+            stretchState = LEFT_BOTTOM_RECT
+        elif self.m_topBorderRect.contains(cursorPos):
+            stretchState = TOP_BORDER
+        elif self.m_rightBorderRect.contains(cursorPos):
+            stretchState = RIGHT_BORDER
+        elif self.m_bottomBorderRect.contains(cursorPos):
+            stretchState = BOTTOM_BORDER
+        elif self.m_leftBorderRect.contains(cursorPos):
+            stretchState = LEFT_BORDER
+        else:
+            stretchState = NO_SELECT
+        return stretchState
+
+    def updateMouseStyle(self, stretchState):
+        if stretchState == NO_SELECT:
+            self.setCursor(Qt.ArrowCursor)
+        elif stretchState == LEFT_TOP_RECT:
+            self.setCursor(Qt.SizeFDiagCursor)
+        elif stretchState == RIGHT_BOTTOM_RECT:
+            self.setCursor(Qt.SizeFDiagCursor)
+        elif stretchState == TOP_BORDER:
+            self.setCursor(Qt.SizeVerCursor)
+        elif stretchState == BOTTOM_BORDER:
+            self.setCursor(Qt.SizeVerCursor)
+        elif stretchState == RIGHT_TOP_RECT:
+            self.setCursor(Qt.SizeBDiagCursor)
+        elif stretchState == LEFT_BOTTOM_RECT:
+            self.setCursor(Qt.SizeBDiagCursor)
+        elif stretchState == LEFT_BORDER:
+            self.setCursor(Qt.SizeHorCursor)
+        elif stretchState == RIGHT_BORDER:
+            self.setCursor(Qt.SizeHorCursor)
+        else:
+            self.setCursor(Qt.ArrowCursor)
+
+    # 重写mouseMoveEvent事件，用于获取当前鼠标的位置，将位置传递给getCurrentStretchState方法，得到当前鼠标的状态，然后调用updateMouseStyle对鼠标的样式进行更新
+    def mouseMoveEvent(self, event):
+        # 如果窗口最大化是不能拉伸的
+        # 也不用更新鼠标样式
+        if (self.m_isWindowMax):
+            return super().mouseMoveEvent(event)
+        # 如果当前鼠标未按下，则根据当前鼠标的位置更新鼠标的状态及样式
+        if not self.m_isMousePressed:
+            cursorPos = event.pos()
+            # 根据当前鼠标的位置显示不同的样式
+            self.m_stretchRectState = self.getCurrentStretchState(cursorPos)
+            self.updateMouseStyle(self.m_stretchRectState)
+        # 如果当前鼠标左键已经按下，则记录下第二个点的位置，并更新窗口的大小
+        else:
+            self.m_endPoint = self.mapToGlobal(event.pos())
+            self.updateWindowSize()
+        return super().mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        # 当前鼠标进入了以上指定的8个区域，并且是左键按下时才开始进行窗口拉伸
+        if (self.m_stretchRectState != NO_SELECT and event.button() == Qt.LeftButton):
+            self.m_isMousePressed = True
+            # 记录下当前鼠标位置，为后面计算拉伸位置
+            self.m_startPoint = self.mapToGlobal(event.pos())
+            # 保存下拉伸前的窗口位置及大小, 这里使用tuple是因为用QRect会被python优化成直接指向self.geometry()
+            self.m_windowRectBeforeStretch = (
+                self.geometry().x(), self.geometry().y(), self.geometry().width(), self.geometry().height())
+        return super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        # 鼠标松开后意味之窗口拉伸结束，置标志位，并且重新计算用于拉伸的8个区域Rect
+        self.m_isMousePressed = False
+        self.calculateCurrentStrechRect()
+        return super().mouseReleaseEvent(event)
+
+    # 拉伸窗口过程中，根据记录的坐标更新窗口大小
+    def updateWindowSize(self):
+        # 拉伸时要注意设置窗口最小值
+        x = self.m_windowRectBeforeStretch[0]
+        y = self.m_windowRectBeforeStretch[1]
+        w = self.m_windowRectBeforeStretch[2]
+        h = self.m_windowRectBeforeStretch[3]
+        windowRect = QRect(x, y, w, h)
+        delValue_X = self.m_startPoint.x() - self.m_endPoint.x()
+        delValue_Y = self.m_startPoint.y() - self.m_endPoint.y()
+        if (self.m_stretchRectState == LEFT_BORDER):
+            topLeftPoint = windowRect.topLeft()
+            topLeftPoint.setX(topLeftPoint.x() - delValue_X)
+            windowRect.setTopLeft(topLeftPoint)
+        elif (self.m_stretchRectState == RIGHT_BORDER):
+            bottomRightPoint = windowRect.bottomRight()
+            bottomRightPoint.setX(bottomRightPoint.x() - delValue_X)
+            windowRect.setBottomRight(bottomRightPoint)
+        elif (self.m_stretchRectState == TOP_BORDER):
+            topLeftPoint = windowRect.topLeft()
+            topLeftPoint.setY(topLeftPoint.y() - delValue_Y)
+            windowRect.setTopLeft(topLeftPoint)
+        elif (self.m_stretchRectState == BOTTOM_BORDER):
+            bottomRightPoint = windowRect.bottomRight()
+            bottomRightPoint.setY(bottomRightPoint.y() - delValue_Y)
+            windowRect.setBottomRight(bottomRightPoint)
+        elif (self.m_stretchRectState == LEFT_TOP_RECT):
+            topLeftPoint = windowRect.topLeft()
+            topLeftPoint.setX(topLeftPoint.x() - delValue_X)
+            topLeftPoint.setY(topLeftPoint.y() - delValue_Y)
+            windowRect.setTopLeft(topLeftPoint)
+        elif (self.m_stretchRectState == RIGHT_TOP_RECT):
+            topRightPoint = windowRect.topRight()
+            topRightPoint.setX(topRightPoint.x() - delValue_X)
+            topRightPoint.setY(topRightPoint.y() - delValue_Y)
+            windowRect.setTopRight(topRightPoint)
+        elif (self.m_stretchRectState == RIGHT_BOTTOM_RECT):
+            bottomRightPoint = windowRect.bottomRight()
+            bottomRightPoint.setX(bottomRightPoint.x() - delValue_X)
+            bottomRightPoint.setY(bottomRightPoint.y() - delValue_Y)
+            windowRect.setBottomRight(bottomRightPoint)
+        elif (self.m_stretchRectState == LEFT_BOTTOM_RECT):
+            bottomLeftPoint = windowRect.bottomLeft()
+            bottomLeftPoint.setX(bottomLeftPoint.x() - delValue_X)
+            bottomLeftPoint.setY(bottomLeftPoint.y() - delValue_Y)
+            windowRect.setBottomLeft(bottomLeftPoint)
+        # 避免宽或高为零窗口显示有误，这里给窗口设置最小拉伸高度、宽度
+        if (windowRect.width() < self.m_windowMinWidth):
+            windowRect.setLeft(self.geometry().left())
+            windowRect.setWidth(self.m_windowMinWidth)
+        if (windowRect.height() < self.m_windowMinHeight):
+            windowRect.setTop(self.geometry().top())
+            windowRect.setHeight(self.m_windowMinHeight)
+        self.setGeometry(windowRect)
+
+    # 设置当前窗口是否支持拉伸
+    # 此方法需要在调用完initTitleBar方法之后调用，因为titleBar在initTitleBar方法中创建
+    def setSupportStretch(self, isSupportStretch):
+        # 因为需要在鼠标未按下的情况下通过mouseMoveEvent事件捕捉鼠标位置，所以需要设置setMouseTracking为True（如果窗口支持拉伸）
+        self.m_isSupportStretch = isSupportStretch
+        self.setMouseTracking(isSupportStretch)
+        # 这里对子控件也进行了设置，是因为如果不对子控件设置，当鼠标移动到子控件上时，不会发送mouseMoveEvent事件，也就获取不到当前鼠标位置，无法判断鼠标状态及显示样式了。
+        widgetList = self.findChildren(QWidget)
+        for widget in widgetList:
+            widget.setMouseTracking(isSupportStretch)
+        # 这里加了非空判断，防止titleBar未创建
+        if (self.titlebar is not None):
+            # titleBar同理,也需要对自己及子控件进行调用setMouseTracking进行设置，见上方注释
+            # self.titleBar.setSupportStretch(isSupportStretch)
+            pass
+
+    # 返回当前窗口是否支持拉伸
+    def getSupportStretch(self):
+        return self.m_isSupportStretch
