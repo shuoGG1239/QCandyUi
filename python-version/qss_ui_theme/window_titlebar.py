@@ -32,28 +32,30 @@ if not os.path.exists(imageroot + imageclosenorm):
 
 
 class TitleBar(QWidget):
-    titlebarHeight = 30
-    parentwidget = None
+    TITLEBAR_HEIGHT = 30
+    ICON_SIZE = QSize(20, 20)
+    MIN_BUTT_SIZE = QSize(27, 22)
+    MAX_BUTT_SIZE = QSize(27, 22)
+    CLOSE_BUTT_SIZE = QSize(27, 22)
 
-    def __init__(self, parent, colorid):
+    def __init__(self, parent, colorstr):
         super(TitleBar, self).__init__(parent)
-        qss = str()
         self.parentwidget = parent
-        self.setFixedHeight(self.titlebarHeight)
+        self.setFixedHeight(TitleBar.TITLEBAR_HEIGHT)
         self.m_pBackgroundLabel = QLabel(self)
         self.m_pIconLabel = QLabel(self)
         self.m_pTitleLabel = QLabel(self)
         self.m_pMinimizeButton = QPushButton(self)
         self.m_pMaximizeButton = QPushButton(self)
         self.m_pCloseButton = QPushButton(self)
-        self.m_pIconLabel.setFixedSize(20, 20)
+        self.m_pIconLabel.setFixedSize(TitleBar.ICON_SIZE)
         self.m_pIconLabel.setScaledContents(True)
         self.m_pTitleLabel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.m_pBackgroundLabel.resize(self.parentwidget.width(), self.titlebarHeight)
+        self.m_pBackgroundLabel.resize(self.parentwidget.width(), TitleBar.TITLEBAR_HEIGHT)
         # 三大金刚按钮大小
-        self.m_pMinimizeButton.setFixedSize(27, 22)
-        self.m_pMaximizeButton.setFixedSize(27, 22)
-        self.m_pCloseButton.setFixedSize(27, 22)
+        self.m_pMinimizeButton.setFixedSize(TitleBar.MIN_BUTT_SIZE)
+        self.m_pMaximizeButton.setFixedSize(TitleBar.MAX_BUTT_SIZE)
+        self.m_pCloseButton.setFixedSize(TitleBar.CLOSE_BUTT_SIZE)
         self.m_pTitleLabel.setObjectName("whiteLabel")
         self.m_pMinimizeButton.setObjectName("minimizeButton")
         self.m_pMaximizeButton.setObjectName("maximizeButton")
@@ -76,7 +78,7 @@ class TitleBar(QWidget):
         # 标题字体颜色
         self.m_pTitleLabel.setStyleSheet("font-size:13px;margin-bottom:0px;color:%s" % (titletextcolor))
         # 标题栏背景颜色
-        self.m_pBackgroundLabel.setStyleSheet("background:%s" % (colorid))
+        self.m_pBackgroundLabel.setStyleSheet("background:%s" % (colorstr))
         # 三大金刚按钮Ui设置
         self.m_pCloseButton.setStyleSheet(
             self.__get_button_imgqss(imageroot, imageclosenorm, imageclosehover, imageclosepress, imageclosepress))
@@ -86,7 +88,7 @@ class TitleBar(QWidget):
             self.__get_button_imgqss(imageroot, imagemaxnorm, imagemaxhover, imagemaxpress, imagemaxpress))
 
     def __get_button_imgqss(self, root, norm, hover, press, disable):
-        qss = ''
+        qss = str()
         qss += "QPushButton{background:transparent; background-image:url(%s); border:none}" % (
             root + norm)
         qss += "QPushButton:hover{background:transparent; background-image:url(%s)}" % (
@@ -139,10 +141,10 @@ class TitleBar(QWidget):
             elif pButton.objectName() == 'maximizeButton':
                 if pWindow.isMaximized():
                     pWindow.showNormal()
-                    # self.setStyleSheet(...)   # cpp有这段代码,虽然暂时未察觉有什么影响
+                    self.m_pMaximizeButton.setStyleSheet(self.__get_button_imgqss(imageroot, imagemaxnorm, imagemaxhover, imagemaxpress, imagemaxpress))
                 else:
                     pWindow.showMaximized()
-                    # self.setStyleSheet(...)   # cpp有这段代码,虽然暂时未察觉有什么影响
+                    self.m_pMaximizeButton.setStyleSheet(self.__get_button_imgqss(imageroot, imageresizenorm, imageresizehover, imageresizepress, imageresizepress))
             elif pButton.objectName() == 'closeButton':
                 pWindow.close()
                 os._exit(0)
@@ -158,7 +160,7 @@ class TitleBar(QWidget):
                 self.m_pMaximizeButton.setStyle(QApplication.style())
 
     def __setTitleBarSize(self, width):
-        self.m_pBackgroundLabel.resize(width, self.titlebarHeight)
+        self.m_pBackgroundLabel.resize(width, TitleBar.TITLEBAR_HEIGHT)
 
     def setMaximumEnable(self, isenable):
         self.m_pMaximizeButton.setEnabled(isenable)
@@ -176,6 +178,7 @@ class TitleBar(QWidget):
     sys.exit(app.exec_())
 """
 
+# Stretch State
 NO_SELECT = 0,  # 鼠标未进入下方矩形区域
 LEFT_TOP_RECT = 1  # 鼠标在左上角区域
 TOP_BORDER = 2  # 鼠标在上边框区域
@@ -185,37 +188,67 @@ RIGHT_BOTTOM_RECT = 5  # 鼠标在右下角区域
 BOTTOM_BORDER = 6  # 鼠标在下边框区域
 LEFT_BOTTOM_RECT = 7  # 鼠标在左下角区域
 LEFT_BORDER = 8  # 鼠标在左边框区域
+# 感知拉伸区域
 STRETCH_RECT_WIDTH = 4
 STRETCH_RECT_HEIGHT = 4
 
 
 class WindowWithTitleBar(QFrame):
-    titlebar = None
-
     def __init__(self, mainwidget, colorstr, parent):
-        global STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT
         super(WindowWithTitleBar, self).__init__()
+        self.m_titlebar = TitleBar(self, colorstr)
+        self.initTitlebar(colorstr)
+        self.initWidgetsAndPack(mainwidget, self.m_titlebar)
+        self.initStretch()
+
+    def initTitlebar(self, color):
+        """
+        初始化Titlebar
+        :param color:
+        :return:
+        """
+        self.m_titlebar = TitleBar(self, color)
+
+    def initWidgetsAndPack(self, mainwidget, titlebar):
+        """
+        将主体Widget和titleBar拼装起来
+        :param mainwidget:
+        :param titlebar:
+        :return:
+        """
         self.mainwidget = mainwidget
-        self.resize(mainwidget.width(), mainwidget.height() + TitleBar.titlebarHeight)
-        self.titlebar = TitleBar(self, colorstr)
+        self.resize(mainwidget.width(), mainwidget.height() + TitleBar.TITLEBAR_HEIGHT)
         self.setWindowFlags(Qt.FramelessWindowHint | self.windowFlags())
-        self.installEventFilter(self.titlebar)
+        self.installEventFilter(self.m_titlebar)
         # 布局: titlbar在上主窗体在下
         pLayout = QVBoxLayout(self)
-        pLayout.addWidget(self.titlebar)
+        pLayout.addWidget(self.m_titlebar)
         pLayout.addWidget(mainwidget)
         pLayout.setSpacing(0)  # 排列的几个widget为0间隔
         pLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(pLayout)
-        self.init_new_attr()
 
-    def init_new_attr(self):
+    def initStretch(self):
+        """
+        初始化拉伸功能
+        :return:
+        """
         self.setSupportStretch(True)
         self.m_isWindowMax = False
         self.m_stretchRectState = NO_SELECT
         self.m_isMousePressed = False
-        self.m_windowMinWidth = 200
-        self.m_windowMinHeight = 100
+        self.setMinimumSize(400, 300)
+
+    def setMinimumSize(self, width, height):
+        """
+        设置拉伸的最小Size
+        :param width:
+        :param height:
+        :return:
+        """
+        self.m_windowMinWidth = width
+        self.m_windowMinHeight = height
+        super(WindowWithTitleBar, self).setMinimumSize(width, height)
 
     def setWindowRadius(self, n_px):
         """
@@ -244,20 +277,19 @@ class WindowWithTitleBar(QFrame):
         self.m_leftTopRect = QRect(0, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
         self.m_leftBottomRect = QRect(0, self.height() - STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, STRETCH_RECT_WIDTH)
         self.m_rightTopRect = QRect(self.width() - STRETCH_RECT_WIDTH, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
-        self.m_rightBottomRect = QRect(self.width() - STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT,
-                                       STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
+        self.m_rightBottomRect = QRect(self.width() - STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
         # 四条边Rect
         self.m_topBorderRect = QRect(STRETCH_RECT_WIDTH, 0, self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
-        self.m_rightBorderRect = QRect(
-            self.width() - STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
-            self.height() - STRETCH_RECT_HEIGHT * 2)
-        self.m_bottomBorderRect = QRect(STRETCH_RECT_WIDTH,
-                                        self.height() - STRETCH_RECT_HEIGHT, self.width() - STRETCH_RECT_WIDTH * 2,
-                                        STRETCH_RECT_HEIGHT)
-        self.m_leftBorderRect = QRect(0, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
-                                      self.height() - STRETCH_RECT_HEIGHT * 2)
+        self.m_rightBorderRect = QRect(self.width() - STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT * 2)
+        self.m_bottomBorderRect = QRect(STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT, self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
+        self.m_leftBorderRect = QRect(0, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT * 2)
 
     def getCurrentStretchState(self, cursorPos):
+        """
+        根据鼠标的位置获取StretchState
+        :param cursorPos:
+        :return:
+        """
         if self.m_leftTopRect.contains(cursorPos):
             stretchState = LEFT_TOP_RECT
         elif self.m_rightTopRect.contains(cursorPos):
@@ -279,6 +311,11 @@ class WindowWithTitleBar(QFrame):
         return stretchState
 
     def updateMouseStyle(self, stretchState):
+        """
+        根据stretchState刷新鼠标的样式
+        :param stretchState:
+        :return:
+        """
         if stretchState == NO_SELECT:
             self.setCursor(Qt.ArrowCursor)
         elif stretchState == LEFT_TOP_RECT:
@@ -300,8 +337,13 @@ class WindowWithTitleBar(QFrame):
         else:
             self.setCursor(Qt.ArrowCursor)
 
-    # 重写mouseMoveEvent事件，用于获取当前鼠标的位置，将位置传递给getCurrentStretchState方法，得到当前鼠标的状态，然后调用updateMouseStyle对鼠标的样式进行更新
     def mouseMoveEvent(self, event):
+        """
+        重写mouseMoveEvent事件，用于获取当前鼠标的位置，将位置传递给getCurrentStretchState方法，
+        得到当前鼠标的状态，然后调用updateMouseStyle对鼠标的样式进行更新
+        :param event:
+        :return:
+        """
         # 如果窗口最大化是不能拉伸的
         # 也不用更新鼠标样式
         if (self.m_isWindowMax):
@@ -324,25 +366,27 @@ class WindowWithTitleBar(QFrame):
             self.m_isMousePressed = True
             # 记录下当前鼠标位置，为后面计算拉伸位置
             self.m_startPoint = self.mapToGlobal(event.pos())
-            # 保存下拉伸前的窗口位置及大小, 这里使用tuple是因为用QRect会被python优化成直接指向self.geometry()
-            self.m_windowRectBeforeStretch = (
-                self.geometry().x(), self.geometry().y(), self.geometry().width(), self.geometry().height())
+            # 保存下拉伸前的窗口位置及大小
+            self.m_windowRectBeforeStretch = QRect(self.geometry().x(), self.geometry().y(), self.geometry().width(), self.geometry().height())
         return super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        # 鼠标松开后意味之窗口拉伸结束，置标志位，并且重新计算用于拉伸的8个区域Rect
+        """
+        鼠标松开后意味之窗口拉伸结束，置标志位，并且重新计算用于拉伸的8个区域Rect
+        :param event:
+        :return:
+        """
         self.m_isMousePressed = False
         self.calculateCurrentStrechRect()
         return super().mouseReleaseEvent(event)
 
-    # 拉伸窗口过程中，根据记录的坐标更新窗口大小
     def updateWindowSize(self):
-        # 拉伸时要注意设置窗口最小值
-        x = self.m_windowRectBeforeStretch[0]
-        y = self.m_windowRectBeforeStretch[1]
-        w = self.m_windowRectBeforeStretch[2]
-        h = self.m_windowRectBeforeStretch[3]
-        windowRect = QRect(x, y, w, h)
+        """
+        拉伸窗口过程中，根据记录的坐标更新窗口大小
+        :return:
+        """
+        windowRect = QRect(self.m_windowRectBeforeStretch.x(), self.m_windowRectBeforeStretch.y(),
+                           self.m_windowRectBeforeStretch.width(), self.m_windowRectBeforeStretch.height())
         delValue_X = self.m_startPoint.x() - self.m_endPoint.x()
         delValue_Y = self.m_startPoint.y() - self.m_endPoint.y()
         if (self.m_stretchRectState == LEFT_BORDER):
@@ -390,9 +434,12 @@ class WindowWithTitleBar(QFrame):
             windowRect.setHeight(self.m_windowMinHeight)
         self.setGeometry(windowRect)
 
-    # 设置当前窗口是否支持拉伸
-    # 此方法需要在调用完initTitleBar方法之后调用，因为titleBar在initTitleBar方法中创建
     def setSupportStretch(self, isSupportStretch):
+        """
+        设置当前窗口是否支持拉伸
+        :param isSupportStretch:
+        :return:
+        """
         # 因为需要在鼠标未按下的情况下通过mouseMoveEvent事件捕捉鼠标位置，所以需要设置setMouseTracking为True（如果窗口支持拉伸）
         self.m_isSupportStretch = isSupportStretch
         self.setMouseTracking(isSupportStretch)
@@ -400,12 +447,14 @@ class WindowWithTitleBar(QFrame):
         widgetList = self.findChildren(QWidget)
         for widget in widgetList:
             widget.setMouseTracking(isSupportStretch)
-        # 这里加了非空判断，防止titleBar未创建
-        if (self.titlebar is not None):
+        if (self.m_titlebar is not None):
             # titleBar同理,也需要对自己及子控件进行调用setMouseTracking进行设置，见上方注释
             # self.titleBar.setSupportStretch(isSupportStretch)
             pass
 
-    # 返回当前窗口是否支持拉伸
     def getSupportStretch(self):
+        """
+        返回当前窗口是否支持拉伸
+        :return:
+        """
         return self.m_isSupportStretch
