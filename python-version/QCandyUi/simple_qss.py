@@ -27,12 +27,6 @@ eg:
 """
 
 
-def getQssByTheme(themeName):
-    themeName = themeName.lower()
-    if themeName == 'bluegreen':
-        return getBlueGreenQss()
-
-
 def getBlueGreenQss():
     """
     蓝绿主题
@@ -43,6 +37,18 @@ def getBlueGreenQss():
 
 
 def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName):
+    """
+    通用组件的Qss + CandyBar的Qss
+    :param fontLight:
+    :param fontDark:
+    :param normal:
+    :param light:
+    :param deep:
+    :param disLight:
+    :param disDark:
+    :param themeName:
+    :return:
+    """
     qss_str = str()
     qss_str += __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName)
     qss_str += __getCandyQss(fontLight, deep, fontLight, themeName)
@@ -52,7 +58,15 @@ def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeNam
 def __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName):
     """
     通用组件(Widgets)的Qss
-    :return: qss
+    :param fontLight:
+    :param fontDark:
+    :param normal:
+    :param light:
+    :param deep:
+    :param disLight:
+    :param disDark:
+    :param themeName:
+    :return:
     """
     qss_str = str()
     qss_str += Qss.getFontQss("微软雅黑", fontDark)
@@ -90,7 +104,7 @@ def __getCandyQss(barTextColor, barColor, winBgdColor, themeName):
     qss_str = str()
     qss_str += "Titlebar QLabel#%s{font-size:13px;margin-bottom:0px;color:%s;}" % (Titlebar.TITLE_LABEL_NAME, barTextColor)
     qss_str += "Titlebar QLabel#%s{background:%s;}" % (Titlebar.BACKGROUND_LABEL_NAME, barColor)
-    # 三大金刚键的图片设置
+    # 三大金刚键的图片设置 (最大化恢复正常大小的图片设置只能在Title的onclick中设置)
     qss_str += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
                (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MIN_NORM)
     qss_str += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \

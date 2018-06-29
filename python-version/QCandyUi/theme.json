@@ -1,0 +1,12 @@
+{
+    "defaultTheme": "blueGreen",
+    "blueGreen": {
+        "fontLight": "#FFFFFF",
+        "fontDark": "#015F5F",
+        "normal": "#33CCCC",
+        "light": "#ECFEFE",
+        "deep": "#28AAAA",
+        "disLight": "#CCCCCC",
+        "disDark": "#999999"
+    }
+}

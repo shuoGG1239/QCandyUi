@@ -1,20 +1,36 @@
+import json
+import os
+
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import qApp
 
 from QCandyUi import WindowWithTitleBar
 from QCandyUi import simple_qss
 
+THEME_FILE = 'theme.json'
 
-def createWindow(mainWidget, title='Cool', ico_path='', theme='blueGreen'):
+
+def createWindow(mainWidget, title='Cool', ico_path='', theme=None):
     coolWindow = WindowWithTitleBar.WindowWithTitleBar(mainWidget)
     coolWindow.setWindowTitle(title)
     coolWindow.setWindowIcon(QIcon(ico_path))
-    __setTheme(theme)
+    setTheme(theme)
     return coolWindow
 
 
-def __setTheme(theme):
-    qss = simple_qss.getQssByTheme(theme)
+def setTheme(theme):
+    if os.path.isfile(THEME_FILE):
+        path = THEME_FILE
+    else:
+        path = (os.path.split(__file__)[0] + '\\' + THEME_FILE).replace('\\', '/')
+    tDict = json.load(open(path))
+    if theme is None or theme == '':
+        theme = tDict['defaultTheme']
+        colorDict = tDict[theme]
+    else:
+        colorDict = tDict[theme]
+    qss = simple_qss.getQss(colorDict['fontLight'], colorDict['fontDark'], colorDict['normal'], colorDict['light'],
+                            colorDict['deep'], colorDict['disLight'], colorDict['disDark'], theme)
     qApp.setStyleSheet(qss)
 
 # def green_decorator(aClass):
