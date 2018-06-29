@@ -7,7 +7,7 @@
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QBitmap, QColor
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QFrame
-from qss_ui_theme.titlebar import Titlebar
+from QCandyUi.Titlebar import Titlebar
 
 """
 使用示例:

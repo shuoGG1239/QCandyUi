@@ -1,11 +1,11 @@
-import os
-import win32con
 import win32gui
 
+import win32con
 from PyQt5.Qt import QSizePolicy
 from PyQt5.QtCore import QEvent, QSize, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QPushButton, QHBoxLayout, QApplication, QWidget
-from qss_ui_theme.resourse_cfg import *
+
+from QCandyUi.resourse_cfg import *
 
 
 class Titlebar(QWidget):
@@ -19,9 +19,10 @@ class Titlebar(QWidget):
     CLOSE_BUTT_SIZE = QSize(27, 22)
     TITLE_LABEL_NAME = "Titlebar_titleLabel"
     BACKGROUND_LABEL_NAME = "Titlebar_backgroundLabel"
-    MIN_BUTT_NAME = "minimizeButton"
-    MAX_BUTT_NAME = "maximizeButton"
-    CLOSE_BUTT_NAME = "closeButton"
+    MIN_BUTT_NAME = "Titlebar_minimizeButton"
+    MAX_BUTT_NAME = "Titlebar_maximizeButton"
+    CLOSE_BUTT_NAME = "Titlebar_closeButton"
+    THEME = 'default'
 
     def __init__(self, parent):
         super(Titlebar, self).__init__(parent)
@@ -48,7 +49,7 @@ class Titlebar(QWidget):
         self.m_pMaximizeButton.setObjectName(Titlebar.MAX_BUTT_NAME)
         self.m_pCloseButton.setObjectName(Titlebar.CLOSE_BUTT_NAME)
         # 三大金刚按钮图片设置
-        self.initButtonImage()
+        self.setButtonImages()
         # 布局
         pLayout = QHBoxLayout(self)
         pLayout.addWidget(self.m_pIconLabel)
@@ -76,16 +77,16 @@ class Titlebar(QWidget):
         # 标题栏背景颜色
         self.m_pBackgroundLabel.setStyleSheet("background:%s" % (backgroundColor))
 
-    def initButtonImage(self):
+    def setButtonImages(self):
         # 三大金刚按钮Ui设置
         self.m_pCloseButton.setStyleSheet(
-            self.__get_button_imgqss(imageroot, imageclosenorm, imageclosehover, imageclosepress, imageclosepress))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_CLOSE_NORM, IMG_CLOSE_HOVER, IMG_CLOSE_PRESS, IMG_CLOSE_PRESS))
         self.m_pMinimizeButton.setStyleSheet(
-            self.__get_button_imgqss(imageroot, imageminnorm, imageminhover, imageminpress, imageminpress))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MIN_NORM, IMG_MIN_HOVER, IMG_MIN_PRESS, IMG_MIN_PRESS))
         self.m_pMaximizeButton.setStyleSheet(
-            self.__get_button_imgqss(imageroot, imagemaxnorm, imagemaxhover, imagemaxpress, imagemaxpress))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
 
-    def __get_button_imgqss(self, root, norm, hover, press, disable):
+    def __getButtonImgQss(self, root, norm, hover, press, disable):
         qss = str()
         qss += "QPushButton{background:transparent; background-image:url(%s); border:none}" % (
             root + norm)
@@ -139,10 +140,10 @@ class Titlebar(QWidget):
             elif pButton.objectName() == Titlebar.MAX_BUTT_NAME:
                 if pWindow.isMaximized():
                     pWindow.showNormal()
-                    self.m_pMaximizeButton.setStyleSheet(self.__get_button_imgqss(imageroot, imagemaxnorm, imagemaxhover, imagemaxpress, imagemaxpress))
+                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
                 else:
                     pWindow.showMaximized()
-                    self.m_pMaximizeButton.setStyleSheet(self.__get_button_imgqss(imageroot, imageresizenorm, imageresizehover, imageresizepress, imageresizepress))
+                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_RESIZE_NORM, IMG_RESIZE_HOVER, IMG_RESIZE_PRESS, IMG_RESIZE_PRESS))
             elif pButton.objectName() == Titlebar.CLOSE_BUTT_NAME:
                 pWindow.close()
                 os._exit(0)
