@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import qApp
-from qss_ui_theme import window_titlebar
+
 from qss_ui_theme import qss_setting as Qss
+from qss_ui_theme import titlebar
+from qss_ui_theme import window_titlebar
 
 """
 示例1:
@@ -48,7 +50,7 @@ def setAppGreenStyle():
     qApp.setStyleSheet(getGreenStyleTitleWindowQss())
 
 
-def getGreenStyleQss():
+def __getGreenStyleQss():
     """
     绿色主题的Qss, 想创造什么蓝色主题可以按这个方法的格式来创
     :return: green Qss string
@@ -60,16 +62,16 @@ def getGreenStyleQss():
     qss_str += Qss.getPlaineditQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
     qss_str += Qss.getTextBrowerQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
     qss_str += Qss.getLineeditQss(Qss.LIGHTGRAY, Qss.BLUEGREEN)
-    qss_str += Qss.getComboxQss(Qss.WHITE, Qss.LIGHTGRAY, Qss.BLUEGREEN, window_titlebar.imageroot + "bluearrow.png")
-    img_norm = window_titlebar.imageroot + "radio_normal.png"
-    img_down = window_titlebar.imageroot + "radio_down.png"
-    img_hover = window_titlebar.imageroot + "radio_hoverUncheck.png"
-    img_downhover = window_titlebar.imageroot + "radio_hoverCheck.png"
+    qss_str += Qss.getComboxQss(Qss.WHITE, Qss.LIGHTGRAY, Qss.BLUEGREEN, titlebar.imageroot + "down_arrow.png")
+    img_norm = titlebar.imageroot + "radio_normal.png"
+    img_down = titlebar.imageroot + "radio_down.png"
+    img_hover = titlebar.imageroot + "radio_hoverUncheck.png"
+    img_downhover = titlebar.imageroot + "radio_hoverCheck.png"
     qss_str += Qss.getRadioButtonQss(img_norm, img_down, img_hover, img_downhover)
-    img_norm = window_titlebar.imageroot + "checkbox_normal.png"
-    img_down = window_titlebar.imageroot + "checkbox_down.png"
-    img_hover = window_titlebar.imageroot + "checkbox_hoverUncheck.png"
-    img_downhover = window_titlebar.imageroot + "checkbox_hoverCheck.png"
+    img_norm = titlebar.imageroot + "checkbox_normal.png"
+    img_down = titlebar.imageroot + "checkbox_down.png"
+    img_hover = titlebar.imageroot + "checkbox_hoverUncheck.png"
+    img_downhover = titlebar.imageroot + "checkbox_hoverCheck.png"
     qss_str += Qss.getCheckBoxQss(img_norm, img_down, img_hover, img_downhover)
     qss_str += Qss.getTabWidgetQss(Qss.BLUEGREEN, Qss.WHITE)
     qss_str += Qss.getSliderQss(Qss.BLUEGREEN, Qss.WHITE, Qss.BLUEGREEN)
@@ -83,8 +85,16 @@ def getGreenStyleTitleWindowQss():
     :return:
     """
     qss_str = str()
-    qss_str += getGreenStyleQss()
+    qss_str += __getGreenStyleQss()
     qss_str += __getTitleWindowQss(Qss.WHITE, Qss.DARKBLUEGREEN)
+    qss_str += __getTitleBarQss(Qss.WHITE, Qss.DARKBLUEGREEN)
+    return qss_str
+
+
+def __getTitleBarQss(textColor, backgroundColor):
+    qss_str = str()
+    qss_str += "QLabel#%s{font-size:13px;margin-bottom:0px;color:%s;}" % (titlebar.Titlebar.TITLE_LABEL_NAME, textColor)
+    qss_str += "QLabel#%s{background:%s;}" % (titlebar.Titlebar.BACKGROUND_LABEL_NAME, backgroundColor)
     return qss_str
 
 

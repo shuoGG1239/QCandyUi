@@ -84,7 +84,7 @@ def getSliderQss(normalColor, grooveColor, handleColor):
     handleRadius = str(6)
     handleOffset = str(3)
     str1 = "QSlider::groove:horizontal,QSlider::add-page:horizontal{height:%spx;border-radius:%spx;background:%s;}" % (
-        normalColor, sliderHeight, sliderRadius)
+        sliderHeight, sliderRadius, normalColor)
     str2 = "QSlider::sub-page:horizontal{height:%spx;border-radius:%spx;background:%s;}" % (
         sliderHeight, sliderRadius, grooveColor)
     str3 = "QSlider::handle:horizontal{width:%spx;margin-top:-%spx;margin-bottom:-%spx;border-radius:%spx;background:qradialgradient(spread:pad,cx:0.5,cy:0.5,radius:0.5,fx:0.5,fy:0.5,stop:0.6 #FFFFFF,stop:0.8 %s);}" % (
