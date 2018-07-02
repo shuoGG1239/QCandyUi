@@ -8,5 +8,14 @@
         "deep": "#28AAAA",
         "disLight": "#CCCCCC",
         "disDark": "#999999"
+    },
+    "blue": {
+        "fontLight": "#FFFFFF",
+        "fontDark": "#192e4b",
+        "normal": "#4c73a8",
+        "light": "#88b5f1",
+        "deep": "#2e486c",
+        "disLight": "#CCCCCC",
+        "disDark": "#999999"       
     }
 }
