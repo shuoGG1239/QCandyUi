@@ -1,3 +1,4 @@
 include *.png
+include *.json
 include QCandyUi/FlatUiSrcImage *.png
-recursive-include QCandyUi *.png
+recursive-include QCandyUi *.png *.json
