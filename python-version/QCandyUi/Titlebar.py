@@ -66,7 +66,7 @@ class Titlebar(QWidget):
         self.m_pMaximizeButton.clicked.connect(self.__slot_onclicked)
         self.m_pCloseButton.clicked.connect(self.__slot_onclicked)
         # 设置默认样式(bar的字颜色和背景颜色)
-        self.setTitleBarStyle(Titlebar.BGD_COLOR, Titlebar.TITLE_TEXT_COLOR)
+        # self.setTitleBarStyle(Titlebar.BGD_COLOR, Titlebar.TITLE_TEXT_COLOR)
 
     def setMaximumEnable(self, isenable):
         self.m_pMaximizeButton.setEnabled(isenable)
