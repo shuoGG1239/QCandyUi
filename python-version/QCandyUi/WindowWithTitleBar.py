@@ -7,19 +7,8 @@
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QBitmap, QColor
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QFrame
-from QCandyUi.Titlebar import Titlebar
 
-"""
-使用示例:
-    app = QApplication(sys.argv)
-    keywidget = KeyActionWidget.KeyActionWidget()
-    mainWindow = window_titlebar.WindowWithTitleBar(keywidget, qss_setting.DARKBLUEGREEN, 0)
-    mainWindow.setWindowTitle('Key action')
-    mainWindow.setWindowIcon(QIcon(window_titlebar.imageroot + 'myicon.ico'))
-    green_theme.setAppGreenStyle()
-    mainWindow.show()
-    sys.exit(app.exec_())
-"""
+from QCandyUi.Titlebar import Titlebar
 
 # Stretch State
 NO_SELECT = 0,  # 鼠标未进入下方矩形区域
@@ -114,12 +103,16 @@ class WindowWithTitleBar(QFrame):
         self.m_leftTopRect = QRect(0, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
         self.m_leftBottomRect = QRect(0, self.height() - STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, STRETCH_RECT_WIDTH)
         self.m_rightTopRect = QRect(self.width() - STRETCH_RECT_WIDTH, 0, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
-        self.m_rightBottomRect = QRect(self.width() - STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
+        self.m_rightBottomRect = QRect(self.width() - STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT,
+                                       STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT)
         # 四条边Rect
         self.m_topBorderRect = QRect(STRETCH_RECT_WIDTH, 0, self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
-        self.m_rightBorderRect = QRect(self.width() - STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT * 2)
-        self.m_bottomBorderRect = QRect(STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT, self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
-        self.m_leftBorderRect = QRect(0, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT * 2)
+        self.m_rightBorderRect = QRect(self.width() - STRETCH_RECT_WIDTH, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
+                                       self.height() - STRETCH_RECT_HEIGHT * 2)
+        self.m_bottomBorderRect = QRect(STRETCH_RECT_WIDTH, self.height() - STRETCH_RECT_HEIGHT,
+                                        self.width() - STRETCH_RECT_WIDTH * 2, STRETCH_RECT_HEIGHT)
+        self.m_leftBorderRect = QRect(0, STRETCH_RECT_HEIGHT, STRETCH_RECT_WIDTH,
+                                      self.height() - STRETCH_RECT_HEIGHT * 2)
 
     def getCurrentStretchState(self, cursorPos):
         """
@@ -204,7 +197,8 @@ class WindowWithTitleBar(QFrame):
             # 记录下当前鼠标位置，为后面计算拉伸位置
             self.m_startPoint = self.mapToGlobal(event.pos())
             # 保存下拉伸前的窗口位置及大小
-            self.m_windowRectBeforeStretch = QRect(self.geometry().x(), self.geometry().y(), self.geometry().width(), self.geometry().height())
+            self.m_windowRectBeforeStretch = QRect(self.geometry().x(), self.geometry().y(), self.geometry().width(),
+                                                   self.geometry().height())
         return super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):

@@ -1,35 +1,11 @@
-from PyQt5.QtWidgets import qApp
-
 from QCandyUi import qss_getter as Qss
 from QCandyUi.Titlebar import Titlebar
-from QCandyUi import WindowWithTitleBar
 from QCandyUi.resourse_cfg import *
-
-"""
-示例1:
-    直接使用装饰器@green_decorator
-eg:
-@green_decorator
-class CharModify(QWidget):
-    ... ...
-
-
-示例2:
-    非常简单, 只要一句setAppGreenStyle()就能做到设置绿色主题;
-    但是只用这句的话只有绿色样式, 没有绿色扁平titlebar, 是系统自带的标题栏;
-eg:
-    import sys
-    app = QApplication(sys.argv)
-    mainWindow = KeyActionWidget.KeyActionWidget()
-    green_theme.setAppGreenStyle()
-    mainWindow.show()
-    sys.exit(app.exec_())
-"""
 
 
 def getBlueGreenQss():
     """
-    蓝绿主题
+    蓝绿主题 (默认主题)
     :return:
     """
     # fontLight, fontDark, normal, light, deep, disLight, disDark
