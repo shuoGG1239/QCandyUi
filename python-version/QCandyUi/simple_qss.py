@@ -25,6 +25,7 @@ def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeImg
     :param themeImgDir:
     :return:
     """
+    themeImgDir = themeImgDir if os.path.isdir(IMAGE_ROOT + themeImgDir) else 'default'
     qss = str()
     qss += __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeImgDir)
     qss += __getCandyQss(fontLight, deep, fontLight, themeImgDir)

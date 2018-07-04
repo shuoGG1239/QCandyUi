@@ -57,7 +57,7 @@ mainWindow = TcpUdpSerialportTool.TcpUdpSerialPortTool()
 mainWindow.show()
 sys.exit(app.exec_())
 ```
-![blueDeep](https://i.loli.net/2018/07/04/5b3c414d0536a.png)
+![blueDeep](https://i.loli.net/2018/07/04/5b3ca389e4e53.png)
 
 * 想自己新增颜色主题可以在theme.json里面配
 * py模块的安装包在/python-version/dist中
