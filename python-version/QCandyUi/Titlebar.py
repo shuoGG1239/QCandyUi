@@ -5,7 +5,7 @@ from PyQt5.Qt import QSizePolicy
 from PyQt5.QtCore import QEvent, QSize, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QPushButton, QHBoxLayout, QApplication, QWidget
 
-from QCandyUi.resourse_cfg import *
+from .resourse_cfg import *
 
 
 class Titlebar(QWidget):
@@ -22,7 +22,7 @@ class Titlebar(QWidget):
     MIN_BUTT_NAME = "Titlebar_minimizeButton"
     MAX_BUTT_NAME = "Titlebar_maximizeButton"
     CLOSE_BUTT_NAME = "Titlebar_closeButton"
-    THEME = 'default'
+    THEME_IMG_DIR = 'default'
 
     def __init__(self, parent):
         super(Titlebar, self).__init__(parent)
@@ -80,11 +80,11 @@ class Titlebar(QWidget):
     def setButtonImages(self):
         # 三大金刚按钮Ui设置
         self.m_pCloseButton.setStyleSheet(
-            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_CLOSE_NORM, IMG_CLOSE_HOVER, IMG_CLOSE_PRESS, IMG_CLOSE_PRESS))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_CLOSE_NORM, IMG_CLOSE_HOVER, IMG_CLOSE_PRESS, IMG_CLOSE_PRESS))
         self.m_pMinimizeButton.setStyleSheet(
-            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MIN_NORM, IMG_MIN_HOVER, IMG_MIN_PRESS, IMG_MIN_PRESS))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_MIN_NORM, IMG_MIN_HOVER, IMG_MIN_PRESS, IMG_MIN_PRESS))
         self.m_pMaximizeButton.setStyleSheet(
-            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
+            self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
 
     def __getButtonImgQss(self, root, norm, hover, press, disable):
         qss = str()
@@ -140,10 +140,10 @@ class Titlebar(QWidget):
             elif pButton.objectName() == Titlebar.MAX_BUTT_NAME:
                 if pWindow.isMaximized():
                     pWindow.showNormal()
-                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
+                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_MAX_NORM, IMG_MAX_HOVER, IMG_MAX_PRESS, IMG_MAX_PRESS))
                 else:
                     pWindow.showMaximized()
-                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME + "/", IMG_RESIZE_NORM, IMG_RESIZE_HOVER, IMG_RESIZE_PRESS, IMG_RESIZE_PRESS))
+                    self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_RESIZE_NORM, IMG_RESIZE_HOVER, IMG_RESIZE_PRESS, IMG_RESIZE_PRESS))
             elif pButton.objectName() == Titlebar.CLOSE_BUTT_NAME:
                 pWindow.close()
                 os._exit(0)

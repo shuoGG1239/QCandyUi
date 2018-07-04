@@ -1,8 +1,3 @@
-# from PyQt5.QtWidgets import QSlider, QLineEdit, QPushButton, QProgressBar
-
-# global css to use
-qss = ""
-
 # const color string
 WHITE = "#FFFFFF"
 BLACK = "#000000"

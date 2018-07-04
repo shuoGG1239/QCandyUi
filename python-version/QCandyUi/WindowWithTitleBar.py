@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QBitmap, QColor
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QFrame
 
-from QCandyUi.Titlebar import Titlebar
+from .Titlebar import Titlebar
 
 # Stretch State
 NO_SELECT = 0,  # 鼠标未进入下方矩形区域

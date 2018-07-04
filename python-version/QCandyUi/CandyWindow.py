@@ -4,27 +4,28 @@ import os
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import qApp
 
-from QCandyUi import WindowWithTitleBar
-from QCandyUi import simple_qss
-
+from . import WindowWithTitleBar
+from . import simple_qss
 """
-使用示例1:
+# 示例1和2最终效果一样, 不过推荐用1的方法
+- 使用示例1:
     app = QApplication(sys.argv)
     w = CandyWindow.createWindow(LogViewer(), 'Log Viewer', 'myicon.ico', 'blueGreen')
     w.show()
     sys.exit(app.exec_())
 
-使用示例2:
+
+- 使用示例2:
 eg:
-@colorful('blue')
-class CharModify(QWidget):
+@colorful('blueGreen')
+class LogViewer(QWidget):
     ... ...
 """
 
 
 def colorful(theme):
     """
-    彩色主题装饰, 可以装饰所有的QWidget类使其直接拥有彩色主题
+    彩色主题装饰, 可以装饰所有的QWidget类使其直接拥有彩色主题 (带Titlebar)
     :param theme: 主题名, 与theme.json里面的主题名对应
     :return:
     """
@@ -42,7 +43,7 @@ def colorful(theme):
 
 def createWindow(mainWidget, theme=None, title='Cool', ico_path=''):
     """
-    快速创建彩色窗
+    快速创建彩色窗 (带Titlebar)
     :param mainWidget:
     :param theme:
     :param title:
@@ -57,18 +58,21 @@ def createWindow(mainWidget, theme=None, title='Cool', ico_path=''):
 
 
 def setTheme(theme):
+    """
+    根据theme.json设置主题的qss (只改样式不加Titlebar)
+    :param theme:
+    :return:
+    """
     THEME_FILE = 'theme.json'
     if os.path.isfile(THEME_FILE):
         path = THEME_FILE
     else:
         path = (os.path.split(__file__)[0] + '\\' + THEME_FILE).replace('\\', '/')
     tDict = json.load(open(path))
-    if theme is None or theme == '':
-        theme = tDict['defaultTheme']
-        colorDict = tDict[theme]
+    colorDict = tDict.get(theme)
+    if colorDict is None:
+        qss = simple_qss.getDefaultQss()
     else:
-        colorDict = tDict[theme]
-    qss = simple_qss.getQss(colorDict['fontLight'], colorDict['fontDark'], colorDict['normal'], colorDict['light'],
-                            colorDict['deep'], colorDict['disLight'], colorDict['disDark'], theme)
+        qss = simple_qss.getQss(colorDict['fontLight'], colorDict['fontDark'], colorDict['normal'], colorDict['light'],
+                                colorDict['deep'], colorDict['disLight'], colorDict['disDark'], theme)
     qApp.setStyleSheet(qss)
-

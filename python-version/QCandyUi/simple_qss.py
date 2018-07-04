@@ -1,18 +1,18 @@
-from QCandyUi import qss_getter as Qss
-from QCandyUi.Titlebar import Titlebar
-from QCandyUi.resourse_cfg import *
+from . import qss_getter as Qss
+from .Titlebar import Titlebar
+from .resourse_cfg import *
 
 
-def getBlueGreenQss():
+def getDefaultQss():
     """
-    蓝绿主题 (默认主题)
+    默认主题
     :return:
     """
     # fontLight, fontDark, normal, light, deep, disLight, disDark
-    return getQss(Qss.WHITE, Qss.DEEPBLUEGREEN, Qss.BLUEGREEN, Qss.LIGHTGREEN, Qss.DARKBLUEGREEN, Qss.LIGHTGRAY, Qss.GRAY, "blueGreen")
+    return getQss(Qss.WHITE, Qss.DEEPBLUEGREEN, Qss.BLUEGREEN, Qss.LIGHTGREEN, Qss.DARKBLUEGREEN, Qss.LIGHTGRAY, Qss.GRAY, "default")
 
 
-def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName):
+def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeImgDir):
     """
     通用组件的Qss + CandyBar的Qss
     :param fontLight:
@@ -22,16 +22,16 @@ def getQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeNam
     :param deep:
     :param disLight:
     :param disDark:
-    :param themeName:
+    :param themeImgDir:
     :return:
     """
-    qss_str = str()
-    qss_str += __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName)
-    qss_str += __getCandyQss(fontLight, deep, fontLight, themeName)
-    return qss_str
+    qss = str()
+    qss += __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeImgDir)
+    qss += __getCandyQss(fontLight, deep, fontLight, themeImgDir)
+    return qss
 
 
-def __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeName):
+def __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark, themeImgDir):
     """
     通用组件(Widgets)的Qss
     :param fontLight:
@@ -41,70 +41,70 @@ def __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark,
     :param deep:
     :param disLight:
     :param disDark:
-    :param themeName:
+    :param themeImgDir:
     :return:
     """
-    qss_str = str()
-    qss_str += Qss.getFontQss("微软雅黑", fontDark)
-    qss_str += Qss.getPushButtonQss(normal, fontLight, light, normal, disLight, fontLight, disDark, disLight)
-    qss_str += Qss.getPlaineditQss(disLight, normal)
-    qss_str += Qss.getTextBrowerQss(disLight, normal)
-    qss_str += Qss.getLineeditQss(disLight, normal)
-    qss_str += Qss.getComboxQss(fontLight, disLight, normal, IMAGE_ROOT + themeName + "/" + "down_arrow.png")
-    img_norm = IMAGE_ROOT + themeName + "/" + "radio_normal.png"
-    img_down = IMAGE_ROOT + themeName + "/" + "radio_down.png"
-    img_hover = IMAGE_ROOT + themeName + "/" + "radio_hoverUncheck.png"
-    img_downhover = IMAGE_ROOT + themeName + "/" + "radio_hoverCheck.png"
-    qss_str += Qss.getRadioButtonQss(img_norm, img_down, img_hover, img_downhover)
-    img_norm = IMAGE_ROOT + themeName + "/" + "checkbox_normal.png"
-    img_down = IMAGE_ROOT + themeName + "/" + "checkbox_down.png"
-    img_hover = IMAGE_ROOT + themeName + "/" + "checkbox_hoverUncheck.png"
-    img_downhover = IMAGE_ROOT + themeName + "/" + "checkbox_hoverCheck.png"
-    qss_str += Qss.getCheckBoxQss(img_norm, img_down, img_hover, img_downhover)
-    qss_str += Qss.getTabWidgetQss(normal, fontLight)
-    qss_str += Qss.getSliderQss(normal, fontLight, normal)
-    qss_str += Qss.getScrollbarQss(normal)
-    return qss_str
+    qss = str()
+    qss += Qss.getFontQss("微软雅黑", fontDark)
+    qss += Qss.getPushButtonQss(normal, fontLight, light, normal, disLight, fontLight, disDark, disLight)
+    qss += Qss.getPlaineditQss(disLight, normal)
+    qss += Qss.getTextBrowerQss(disLight, normal)
+    qss += Qss.getLineeditQss(disLight, normal)
+    qss += Qss.getComboxQss(fontLight, disLight, normal, IMAGE_ROOT + themeImgDir + "/" + "down_arrow.png")
+    img_norm = IMAGE_ROOT + themeImgDir + "/" + "radio_normal.png"
+    img_down = IMAGE_ROOT + themeImgDir + "/" + "radio_down.png"
+    img_hover = IMAGE_ROOT + themeImgDir + "/" + "radio_hoverUncheck.png"
+    img_downhover = IMAGE_ROOT + themeImgDir + "/" + "radio_hoverCheck.png"
+    qss += Qss.getRadioButtonQss(img_norm, img_down, img_hover, img_downhover)
+    img_norm = IMAGE_ROOT + themeImgDir + "/" + "checkbox_normal.png"
+    img_down = IMAGE_ROOT + themeImgDir + "/" + "checkbox_down.png"
+    img_hover = IMAGE_ROOT + themeImgDir + "/" + "checkbox_hoverUncheck.png"
+    img_downhover = IMAGE_ROOT + themeImgDir + "/" + "checkbox_hoverCheck.png"
+    qss += Qss.getCheckBoxQss(img_norm, img_down, img_hover, img_downhover)
+    qss += Qss.getTabWidgetQss(normal, fontLight)
+    qss += Qss.getSliderQss(normal, fontLight, normal)
+    qss += Qss.getScrollbarQss(normal)
+    return qss
 
 
-def __getCandyQss(barTextColor, barColor, winBgdColor, themeName):
+def __getCandyQss(barTextColor, barColor, winBgdColor, themeImgDir):
     """
     TitleBar+CandyWindow的Qss
     :param barTextColor: 文字颜色
     :param barColor: bar主体颜色
     :param winBgdColor: 主体窗口背景颜色
-    :param themeName: 主题名(作用主要是为了找按钮图片)
+    :param themeImgDir: 主题名(作用主要是为了找按钮图片)
     :return: qss
     """
-    Titlebar.THEME = themeName
-    qss_str = str()
-    qss_str += "Titlebar QLabel#%s{font-size:13px;margin-bottom:0px;color:%s;}" % (Titlebar.TITLE_LABEL_NAME, barTextColor)
-    qss_str += "Titlebar QLabel#%s{background:%s;}" % (Titlebar.BACKGROUND_LABEL_NAME, barColor)
+    Titlebar.THEME_IMG_DIR = themeImgDir
+    qss = str()
+    qss += "Titlebar QLabel#%s{font-size:13px;margin-bottom:0px;color:%s;}" % (Titlebar.TITLE_LABEL_NAME, barTextColor)
+    qss += "Titlebar QLabel#%s{background:%s;}" % (Titlebar.BACKGROUND_LABEL_NAME, barColor)
     # 三大金刚键的图片设置 (最大化恢复正常大小的图片设置只能在Title的onclick中设置)
-    qss_str += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
-               (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MIN_NORM)
-    qss_str += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MIN_HOVER)
-    qss_str += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MIN_PRESS)
-    qss_str += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MIN_PRESS)
-    qss_str += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
-               (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MAX_NORM)
-    qss_str += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MAX_HOVER)
-    qss_str += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MAX_PRESS)
-    qss_str += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_MAX_PRESS)
-    qss_str += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
-               (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_CLOSE_NORM)
-    qss_str += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_CLOSE_HOVER)
-    qss_str += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_CLOSE_PRESS)
-    qss_str += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
-               (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeName + "/" + IMG_CLOSE_PRESS)
+    qss += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
+           (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MIN_NORM)
+    qss += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MIN_HOVER)
+    qss += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MIN_PRESS)
+    qss += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MIN_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MIN_PRESS)
+    qss += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
+           (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MAX_NORM)
+    qss += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MAX_HOVER)
+    qss += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MAX_PRESS)
+    qss += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.MAX_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_MAX_PRESS)
+    qss += "Titlebar QPushButton#%s{background:transparent; background-image:url(%s); border:none}" % \
+           (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_CLOSE_NORM)
+    qss += "Titlebar QPushButton#%s:hover{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_CLOSE_HOVER)
+    qss += "Titlebar QPushButton#%s:pressed{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_CLOSE_PRESS)
+    qss += "Titlebar QPushButton#%s:disabled{background:transparent; background-image:url(%s)}" % \
+           (Titlebar.CLOSE_BUTT_NAME, IMAGE_ROOT + themeImgDir + "/" + IMG_CLOSE_PRESS)
     # CandyWindow窗口内底色+外围描边
-    qss_str += "WindowWithTitleBar{background:%s;border:3px solid %s}" % (winBgdColor, barColor)
-    return qss_str
+    qss += "WindowWithTitleBar{background:%s;border:3px solid %s}" % (winBgdColor, barColor)
+    return qss
