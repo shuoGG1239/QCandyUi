@@ -104,11 +104,11 @@ def getCheckBoxQss(normimageurl, checkimageurl, normimageurlhover, checkimageurl
     return str1 + str2 + str3 + str4 + str5
 
 
-def getTabWidgetQss(normalTabColor, normalTabTextColor):
+def getTabWidgetQss(normalTabColor, normalTabTextColor, tabBorderColor):
     str1 = "QTabWidget{color:%s; background:%s;}" % (normalTabTextColor, normalTabColor)
     str2 = "QTabWidget::tab-bar{left:5px}"
-    str3 = "QTabBar::tab{color:%s; background:%s;width:100px;height:25px;border:2px solid #33CCCC;border-radius:2px}" % (
-        normalTabTextColor, normalTabColor)
+    str3 = "QTabBar::tab{color:%s; background:%s;width:100px;height:25px;border:2px solid %s;border-radius:2px}" % (
+        normalTabTextColor, normalTabColor, tabBorderColor)
     str4 = "QTabBar::tab:hover{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     str5 = "QTabBar::tab:selected{color:%s; background:%s;}" % (normalTabColor, normalTabTextColor)
     return str1 + str3 + str4 + str5

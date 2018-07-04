@@ -8,7 +8,7 @@
         "disLight": "#CCCCCC",
         "disDark": "#999999"
     },
-    "blue": {
+    "blueDeep": {
         "fontLight": "#FFFFFF",
         "fontDark": "#192e4b",
         "normal": "#4c73a8",

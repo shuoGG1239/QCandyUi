@@ -61,7 +61,7 @@ def __getWidgetsQss(fontLight, fontDark, normal, light, deep, disLight, disDark,
     img_hover = IMAGE_ROOT + themeImgDir + "/" + "checkbox_hoverUncheck.png"
     img_downhover = IMAGE_ROOT + themeImgDir + "/" + "checkbox_hoverCheck.png"
     qss += Qss.getCheckBoxQss(img_norm, img_down, img_hover, img_downhover)
-    qss += Qss.getTabWidgetQss(normal, fontLight)
+    qss += Qss.getTabWidgetQss(normal, fontLight, normal)
     qss += Qss.getSliderQss(normal, fontLight, normal)
     qss += Qss.getScrollbarQss(normal)
     return qss
