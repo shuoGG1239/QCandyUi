@@ -16,6 +16,6 @@ IMG_CLOSE_HOVER = "closehover.png"
 IMG_CLOSE_PRESS = "closepress.png"
 
 # 资源路径: 相对路径没找到就去安装路径下找
-IMAGE_ROOT = './QCandyUi/FlatUiSrcImage/'
-if not os.path.exists(IMAGE_ROOT + IMG_CLOSE_NORM):
-    IMAGE_ROOT = (os.path.split(__file__)[0] + "\\FlatUiSrcImage\\").replace('\\', '/')
+IMAGE_ROOT = './candyUi/'
+if not os.path.exists(IMAGE_ROOT):
+    IMAGE_ROOT = (os.path.split(__file__)[0] + "\\candyUi\\").replace('\\', '/')

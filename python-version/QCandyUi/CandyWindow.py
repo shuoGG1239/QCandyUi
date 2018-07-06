@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import qApp
 
 from . import WindowWithTitleBar
 from . import simple_qss
+
 """
 # 示例1和2最终效果一样, 不过推荐用1的方法
 - 使用示例1:
@@ -21,6 +22,7 @@ eg:
 class LogViewer(QWidget):
     ... ...
 """
+RESOURCE_DIR = 'candyUi'
 
 
 def colorful(theme):
@@ -41,9 +43,9 @@ def colorful(theme):
     return new_func
 
 
-def createWindow(mainWidget, theme=None, title='Cool', ico_path=''):
+def createWindow(mainWidget, theme=None, title='CandySweet', ico_path=''):
     """
-    快速创建彩色窗 (带Titlebar)
+    快速创建彩色窗 (带TitleBar)
     :param mainWidget:
     :param theme:
     :param title:
@@ -63,13 +65,18 @@ def setTheme(theme):
     :param theme:
     :return:
     """
-    THEME_FILE = 'theme.json'
+    THEME_FILE = RESOURCE_DIR + '/theme.json'
     if os.path.isfile(THEME_FILE):
         path = THEME_FILE
     else:
         path = (os.path.split(__file__)[0] + '\\' + THEME_FILE).replace('\\', '/')
     tDict = json.load(open(path))
-    colorDict = tDict.get(theme)
+    # theme.json的theme的优先级比setTheme中的theme的优先级高
+    configTheme = tDict.get('theme')
+    if configTheme is None or configTheme == '' or tDict.get(configTheme) is None:
+        colorDict = tDict.get(theme)
+    else:
+        colorDict = tDict.get(configTheme)
     if colorDict is None:
         qss = simple_qss.getDefaultQss()
     else:
