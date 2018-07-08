@@ -67,6 +67,8 @@ mainWindow = TcpUdpSerialportTool.TcpUdpSerialPortTool()
 mainWindow = CandyWindow.createWindow(mainWindow, 'blueDeep')
 mainWindow.show()
 ```
+<br>
 
+# Ps:
 * 想自己新增颜色主题可以在theme.json里面配
 * py模块的安装包在/python-version/dist中
