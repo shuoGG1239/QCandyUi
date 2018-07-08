@@ -1,5 +1,5 @@
 # QCandy-UI
-方便快速地美化Qt应用, 提供了C++版和PyQt版
+方便快速地美化Qt应用, 提供了C++版和PyQt版, 糖果色扁平化UI
 
 
 # 使用方法(Python版)
@@ -70,5 +70,5 @@ mainWindow.show()
 <br>
 
 # Ps:
-* 想自己新增颜色主题可以在theme.json里面配
+* 想自己新增颜色主题可以在theme.json里面配, 按照theme.json里的格式配即可
 * py模块的安装包在/python-version/dist中
