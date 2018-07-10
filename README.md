@@ -48,7 +48,7 @@ sys.exit(app.exec_())
 # TcpUdpSerialPortTool.py
 from QCandyUi.CandyWindow import colorful
 
-@colorful('blueDeep')
+@colorful('blue')
 class TcpUdpSerialPortTool(QWidget):
     ... ...
 
@@ -58,13 +58,13 @@ mainWindow = TcpUdpSerialportTool.TcpUdpSerialPortTool()
 mainWindow.show()
 sys.exit(app.exec_())
 ```
-![blueDeep](https://i.loli.net/2018/07/04/5b3ca389e4e53.png)
-* 加了深蓝色主题的窗口(使用CandyWindow.createWindow)
+![blue](https://i.loli.net/2018/07/10/5b44991103a87.png)
+* 加了蓝色主题的窗口(使用CandyWindow.createWindow)
 ```python
 from QCandyUi import CandyWindow
 
 mainWindow = TcpUdpSerialportTool.TcpUdpSerialPortTool()
-mainWindow = CandyWindow.createWindow(mainWindow, 'blueDeep')
+mainWindow = CandyWindow.createWindow(mainWindow, 'blue')
 mainWindow.show()
 ```
 <br>
