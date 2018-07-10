@@ -42,7 +42,7 @@ sys.exit(app.exec_())
 ![blueGreen](https://i.loli.net/2018/07/04/5b3c412bc2977.png)
   
   
-* 加了深蓝色主题的窗口(使用@colorful)
+* 加了蓝色主题的窗口(使用@colorful)
 ```python
 # 窗口类为TcpUdpSerialPortTool
 # TcpUdpSerialPortTool.py
