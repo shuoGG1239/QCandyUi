@@ -60,7 +60,7 @@ class WindowWithTitleBar(QFrame):
         self.m_isWindowMax = False
         self.m_stretchRectState = NO_SELECT
         self.m_isMousePressed = False
-        self.setMinimumSize(400, 300)
+        self.setMinimumSize(self.mainwidget.minimumWidth(), self.mainwidget.minimumHeight() + Titlebar.TITLEBAR_HEIGHT)
 
     def getTitbar(self):
         return self.m_titlebar
