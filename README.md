@@ -1,5 +1,5 @@
 # QCandy-UI
-方便快速地美化Qt应用, 提供了C++版和PyQt版, 糖果色扁平化UI
+方便快速地美化Qt应用, 提供了PyQt版(Cpp版已弃可无视), 糖果色扁平化UI
 
 
 # 使用方法(Python版)
