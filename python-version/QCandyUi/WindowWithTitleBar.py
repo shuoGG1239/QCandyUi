@@ -28,6 +28,7 @@ STRETCH_RECT_HEIGHT = 4
 class WindowWithTitleBar(QFrame):
     def __init__(self, mainwidget, parent=0):
         super(WindowWithTitleBar, self).__init__()
+        self.setObjectName('WindowWithTitleBar')
         self.m_titlebar = Titlebar(self)
         self.initWidgetsAndPack(mainwidget, self.m_titlebar)
         self.initStretch()
