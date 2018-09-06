@@ -290,3 +290,10 @@ class WindowWithTitleBar(QFrame):
         :return:
         """
         return self.m_isSupportStretch
+
+    def setMaxEnable(self, isEnable):
+        """
+        最大化开闭
+        :param isEnable
+        """
+        self.m_titlebar.setMaximumEnable(isEnable)
