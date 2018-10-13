@@ -99,7 +99,8 @@ class Titlebar(QWidget):
         return qss
 
     def mouseDoubleClickEvent(self, e):
-        self.m_pMaximizeButton.clicked.emit()  # 双击全屏
+        if self.m_pMaximizeButton.isEnabled():
+            self.m_pMaximizeButton.clicked.emit()  # 双击全屏
 
     def mousePressEvent(self, e):
         """
