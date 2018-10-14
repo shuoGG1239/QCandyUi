@@ -4,9 +4,9 @@
 
 """
 
-from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QPainter, QBitmap, QColor
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QFrame
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QFrame, QLabel, QGraphicsOpacityEffect
 
 from .Titlebar import Titlebar
 
@@ -32,6 +32,37 @@ class WindowWithTitleBar(QFrame):
         self.m_titlebar = Titlebar(self)
         self.initWidgetsAndPack(mainwidget, self.m_titlebar)
         self.initStretch()
+        self.initTipLabel(mainwidget)
+
+    def initTipLabel(self, parent):
+        """
+        消息提示标签
+        :param parent:
+        :return:
+        """
+        self.tipLabel = QLabel(parent)
+        self.tipLabel.setFixedSize(200, 40)
+        self.tipLabel.setAlignment(Qt.AlignCenter)
+        self.tipLabel.setWordWrap(True)
+        self.tipLabel.setGeometry(self.width() / 2 - self.tipLabel.width() / 2, self.tipLabel.y(),
+                                  self.tipLabel.width(), self.tipLabel.height())
+        self.tipLabel.hide()
+
+    def showTip(self, text, color='#20c3ff'):
+        if self.tipLabel is not None:
+            self.tipLabel.show()
+            self.tipLabel.setStyleSheet(
+                "QLabel{background: %s;border:3px; color: #FFFFFF; border-radius: 5px}" % color)
+            self.tipLabel.setText(text)
+            eff = QGraphicsOpacityEffect(self)
+            self.tipLabel.setGraphicsEffect(eff)
+            self.animate = QPropertyAnimation(eff, "opacity")
+            self.animate.setDuration(2000)
+            self.animate.setStartValue(0.8)
+            self.animate.setEndValue(0)
+            self.animate.setEasingCurve(QEasingCurve.InCubic)
+            self.animate.finished.connect(lambda: self.tipLabel.hide())
+            self.animate.start()
 
     def initWidgetsAndPack(self, mainwidget, titlebar):
         """
@@ -43,10 +74,10 @@ class WindowWithTitleBar(QFrame):
         self.mainwidget = mainwidget
         self.resize(mainwidget.width(), mainwidget.height() + Titlebar.TITLEBAR_HEIGHT)
         self.setWindowFlags(Qt.FramelessWindowHint | self.windowFlags())
-        self.installEventFilter(self.m_titlebar)
+        self.installEventFilter(titlebar)
         # 布局: titlbar在上主窗体在下
         pLayout = QVBoxLayout(self)
-        pLayout.addWidget(self.m_titlebar)
+        pLayout.addWidget(titlebar)
         pLayout.addWidget(mainwidget)
         pLayout.setSpacing(0)  # 排列的几个widget为0间隔
         pLayout.setContentsMargins(0, 0, 0, 0)
