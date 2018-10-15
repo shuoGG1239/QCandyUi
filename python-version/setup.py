@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="QCandyUi",       
-    version="0.13",   
+    version="0.14",   
     description="quick beautify your pyQt5 app",
     keywords='python pyQt ui',
     author='shuoGG',
