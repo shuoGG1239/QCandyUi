@@ -1,5 +1,5 @@
 # QCandy-UI
-方便快速地美化Qt应用, 提供了PyQt版(Cpp版已弃可无视), 糖果色扁平化UI
+方便快速地美化Qt应用, 提供了PyQt版和Cpp版, 糖果色扁平化UI
 
 
 # 使用方法(Python版)
@@ -21,8 +21,8 @@ mainWindow.show()
 sys.exit(app.exec_())
 ```
 ![norm](https://i.loli.net/2018/07/04/5b3c404bde41f.png)
-  
-  
+
+
 * 加了蓝绿色主题的窗口(使用@colorful)
 ```python
 # 窗口类为TcpUdpSerialPortTool
@@ -40,8 +40,8 @@ mainWindow.show()
 sys.exit(app.exec_())
 ```
 ![blueGreen](https://i.loli.net/2018/07/04/5b3c412bc2977.png)
-  
-  
+
+
 * 加了蓝色主题的窗口(使用@colorful)
 ```python
 # 窗口类为TcpUdpSerialPortTool
