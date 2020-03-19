@@ -1,8 +1,10 @@
 # QCandy-UI
 方便快速地美化Qt应用, 糖果色扁平化UI
 
+# 安装
+* pip install QCandyUi
 
-# 使用方法(Python版)
+# 使用方法
 * 仅需在需要美化的窗口类上加上@colorful装饰器即可
 * 也可以调用CandyWindow.creatWindow()返回经美化的QWidget (推荐用这种)
 
