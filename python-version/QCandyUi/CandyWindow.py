@@ -25,9 +25,10 @@ class LogViewer(QWidget):
 RESOURCE_DIR = 'candyUi'
 
 
-def colorful(theme):
+def colorful(theme, ico_path=""):
     """
     彩色主题装饰, 可以装饰所有的QWidget类使其直接拥有彩色主题 (带Titlebar)
+    :param ico_path: 应用图标路径
     :param theme: 主题名, 与theme.json里面的主题名对应
     :return:
     """
@@ -35,7 +36,7 @@ def colorful(theme):
     def new_func(aClass):
         def on_call(*args, **kargs):
             src_widget = aClass(*args, **kargs)
-            dst_widget = createWindow(src_widget, theme)
+            dst_widget = createWindow(src_widget, theme, ico_path=ico_path)
             return dst_widget
 
         return on_call
@@ -43,7 +44,7 @@ def colorful(theme):
     return new_func
 
 
-def createWindow(mainWidget, theme=None, title='CandySweet', ico_path=''):
+def createWindow(mainWidget, theme=None, ico_path=''):
     """
     快速创建彩色窗 (带TitleBar)
     :param mainWidget:
@@ -53,7 +54,7 @@ def createWindow(mainWidget, theme=None, title='CandySweet', ico_path=''):
     :return:
     """
     coolWindow = WindowWithTitleBar.WindowWithTitleBar(mainWidget)
-    coolWindow.setWindowTitle(title)
+    coolWindow.setWindowTitle(mainWidget.windowTitle())
     coolWindow.setWindowIcon(QIcon(ico_path))
     setTheme(theme)
     return coolWindow
