@@ -147,7 +147,7 @@ class Titlebar(QWidget):
                     self.m_pMaximizeButton.setStyleSheet(self.__getButtonImgQss(IMAGE_ROOT + Titlebar.THEME_IMG_DIR + "/", IMG_RESIZE_NORM, IMG_RESIZE_HOVER, IMG_RESIZE_PRESS, IMG_RESIZE_PRESS))
             elif pButton.objectName() == Titlebar.CLOSE_BUTT_NAME:
                 pWindow.close()
-                os._exit(0)
+                # os._exit(0) 将导致点击子窗口关闭时，整个程序关闭
 
     def __updateMaxmize(self):
         pWindow = self.window()
