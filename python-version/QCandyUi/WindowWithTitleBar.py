@@ -44,8 +44,8 @@ class WindowWithTitleBar(QFrame):
         self.tipLabel.setFixedSize(200, 40)
         self.tipLabel.setAlignment(Qt.AlignCenter)
         self.tipLabel.setWordWrap(True)
-        self.tipLabel.setGeometry(self.width() / 2 - self.tipLabel.width() / 2, self.tipLabel.y(),
-                                  self.tipLabel.width(), self.tipLabel.height())
+        self.tipLabel.setGeometry(QRect(int(self.width() / 2 - self.tipLabel.width() / 2), self.tipLabel.y(),
+                                  self.tipLabel.width(), self.tipLabel.height()))
         self.tipLabel.hide()
 
     def showTip(self, text, color='#20c3ff'):
